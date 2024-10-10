@@ -1,0 +1,131 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0;
+}
+
+nav {
+    background-color: #33333366;
+    color: white;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+} 
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+.categorías {
+    text-align: center;
+    margin: 20px 0;
+    font-size: 25px;
+}
+
+.categorías a {
+    margin: 0 10px;
+    color: #a3556f;
+    text-decoration: none;
+}
+
+.categorías a:hover {
+    text-decoration: underline;
+}
+
+.product-card {
+    flex: 1 1 200px; 
+    max-width: 300px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap; /* Permite que los productos se envuelvan si el espacio es insuficiente */
+    justify-content: space-around; /* Distribuye los productos de manera equidistante */
+    gap: 20px; /* Espacio entre los productos */
+    padding: 20px;
+}
+
+.product-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.formulario {
+    max-width: 400px;
+    margin: 20px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.formulario input,
+.formulario button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.formulario button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.formulario button:hover {
+    background-color: #218838;
+}
+
+.product-list {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: center; 
+    gap: 25px; 
+    margin: 20px;
+}
+
+.product-card {
+    background-color: white;
+    padding: 12px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    text-align: center;
+}
+
+.product-card img {
+    width: 300px;   
+    height: 400px;  
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+}
+
+.product-card h2 {
+    margin: 10px 0;
+}
+
+.product-card p {
+    margin: 10px 0;
+}
+
+.product-card a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+.product-card a:hover {
+    text-decoration: underline;
+}
