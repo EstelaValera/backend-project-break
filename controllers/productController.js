@@ -7,7 +7,7 @@ const showProducts = async (req, res) => {
     try {
         const products = await Product.find();
         const productCards = getProductCards(products);
-        res.send(baseHtml() + getNavBar() + productCards);  // Mostrar los productos
+        res.send(baseHtml() + getNavBarWithEdit(products) + productCards); 
     } catch (err) {
         res.status(500).send('Error al obtener productos');
     }
@@ -64,25 +64,28 @@ const createProduct = async (req, res) => {
     }
 };
 
+
 //mostrar formulario de edición de un producto
-// const showEditProduct = async (req, res) => {
-//     const product = await Product.findById(req.params.productId);
-//     if (!product) {
-//         return res.status(404).send('Producto no encontrado');
-//     }
-//     res.send(baseHtml() + getNavBar() + getEditProductForm(product));
-// };
+const showEditProduct = async (req, res) => {
+    const product = await Product.findById(req.params.productId);
+    if (!product) {
+        return res.status(404).send('Producto no encontrado');
+    }
+    res.send(baseHtml() + getNavBar() + getEditProductForm(product));
+};
+
 
 //Actualizar un producto
-// const updateProduct = async (req, res) => {
-//     const { name, description, image, category, size, price } = req.body;
-//     try {
-//         await Product.findByIdAndUpdate(req.params.productId, { name, description, image, category, size, price });
-//         res.redirect('/dasboard');
-//     } catch (err) {
-//         res.status(500).send('Error al actualizar el producto');
-//     }
-// };
+const updateProduct = async (req, res) => {
+    const { name, description, image, category, size, price } = req.body;
+    try {
+        await Product.findByIdAndUpdate(req.params.productId, { name, description, image, category, size, price });
+        res.redirect('/products');
+    } catch (err) {
+        res.status(500).send('Error al actualizar el producto');
+    }
+};
+
 
 //Eliminar un producto
 const deleteProduct = async (req, res) => {
@@ -97,6 +100,7 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+
 //Funciones auxiliares para visualizar el html
 const getProductCards = (products) => {
     return `
@@ -107,11 +111,13 @@ const getProductCards = (products) => {
                     <h2>${product.name}</h2>
                     <p>${product.price}€</p>
                     <a href="/products/${product._id}">Ver detalle</a>
+                    <a href="/products/${product._id}/edit">Editar producto</a>
                 </div>
             `).join('')}
         </div>
     `;
 };
+
 
 // Mostrar productos por categoría
 const showProductsByCategory = async (req, res) => {
@@ -125,6 +131,7 @@ const showProductsByCategory = async (req, res) => {
     }
 };
 
+
 const getInicio =async (req, res) => {
     try {
         res.send(baseHtml() + getNavBar());
@@ -133,6 +140,7 @@ const getInicio =async (req, res) => {
         res.status(500).send('Error al obtener productos de la categoría');
     }
 };
+
 
 const baseHtml = () => `
     <!DOCTYPE html>
@@ -156,6 +164,20 @@ const baseHtml = () => `
 `;
 
 
+const getNavBarWithEdit = (products) => `
+    <nav>
+        <a href="/products" class="navBar">Inicio</a>
+        <a href="/products/show" class="navBar">Nuevo Producto</a>
+        <div class="dropdown">
+            <button class="dropbtn">Editar Producto</button>
+            <div class="dropdown-content">
+                ${products.map(product => `<a href="/products/${product._id}/edit">${product.name}</a>`).join('')}
+            </div>
+        </div>
+    </nav>
+`;
+
+
 const getNavBar = () => `
     <nav>
         <a href="/products">Inicio</a>
@@ -170,19 +192,54 @@ const getProductForm = () => `
         <input type="text" name="name" placeholder="Nombre" required>
         <input type="text" name="description" placeholder="Descripción" required>
         <input type="text" name="image" placeholder="Imagen (URL)">
-        <input type="text" name="category" placeholder="Categoría" required>
-        <input type="text" name="size" placeholder="Talla" required>
+        
+        <label for="category">Categoría:</label>
+        <select name="category" required>
+            <option value="" disabled selected>Seleccione una categoría</option>
+            <option value="camisetas">Camisetas</option>
+            <option value="pantalones">Pantalones</option>
+            <option value="zapatos">Zapatos</option>
+            <option value="accesorios">Accesorios</option>
+        </select>
+
+        <label for="size">Talla:</label>
+        <select name="size" required>
+            <option value="" disabled selected>Seleccione una talla</option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="TALLA UNICA">TALLA UNICA</option>
+        </select>
+
         <input type="number" name="price" placeholder="Precio" required>
-    <button type="submit">Crear Producto</button>
-    </form>`
+        <button type="submit">Crear Producto</button>
+    </form>
+`;
+
+
+    const getEditProductForm = (product) => `
+    <h1>Editar Producto</h1>
+    <form class="editProduct" action="/products/${product._id}/edit" method="POST">
+        <input type="text" name="name" value="${product.name}" required>
+        <input type="text" name="description" value="${product.description}" required>
+        <input type="text" name="image" value="${product.image}">
+        <input type="text" name="category" value="${product.category}" required>
+        <input type="text" name="size" value="${product.size}" required>
+        <input type="number" name="price" value="${product.price}" required>
+        <button type="submit">Actualizar Producto</button>
+    </form>
+`;
+
 
 module.exports = {
     showProducts,
     showProductById,
     showNewProduct,
     createProduct,
-    //showEditProduct,
-    //updateProduct,
+    showEditProduct,
+    updateProduct,
     deleteProduct,
     showProductsByCategory,
     getInicio,

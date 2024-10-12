@@ -2,6 +2,7 @@
 
 Vamos a montar una tienda de ropa con un catálogo de productos y un dashboard para el administrador. Los productos se guardarán en una base de datos de mongo en Atlas. Podemos usar como referencia el pdf [web_ejemplo.pdf](web_ejemplo.pdf) que contiene un ejemplo de cómo podría ser la interfaz de la tienda y el dashboard.
 
+hkk
 ## Índice
 
   - [Estructura de archivos](#estructura-de-archivos)

@@ -1,5 +1,5 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
 h1 {
@@ -7,17 +7,24 @@ h1 {
     margin: 20px 0;
 }
 
+p {
+    font-size: 20px;
+    text-align: center;
+}
+
 nav {
-    background-color: #33333366;
+    background-color: #66656566;
     color: white;
     padding: 10px;
     text-align: center;
+    border-radius: 7px;
 }
 
 nav a {
     color: white;
     margin: 0 15px;
     text-decoration: none;
+    padding: 10px;
 } 
 
 nav a:hover {
@@ -27,7 +34,7 @@ nav a:hover {
 .categorías {
     text-align: center;
     margin: 20px 0;
-    font-size: 25px;
+    font-size: 28px;
 }
 
 .categorías a {
@@ -38,6 +45,7 @@ nav a:hover {
 
 .categorías a:hover {
     text-decoration: underline;
+    color: #852042;
 }
 
 .product-card {
@@ -48,9 +56,9 @@ nav a:hover {
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     display: flex;
-    flex-wrap: wrap; /* Permite que los productos se envuelvan si el espacio es insuficiente */
-    justify-content: space-around; /* Distribuye los productos de manera equidistante */
-    gap: 20px; /* Espacio entre los productos */
+    flex-wrap: wrap; 
+    justify-content: space-around; 
+    gap: 20px; 
     padding: 20px;
 }
 
@@ -60,32 +68,42 @@ nav a:hover {
 }
 
 .formulario {
-    max-width: 400px;
-    margin: 20px auto;
+    max-width: 600px;
+    margin: 25px auto;
     background-color: white;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
 .formulario input,
 .formulario button {
-    width: 100%;
+    width: 97%;
     padding: 10px;
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
+    font-size: 20px;
 }
 
 .formulario button {
-    background-color: #28a745;
+    background-color: #a92246;
     color: white;
     border: none;
     cursor: pointer;
 }
 
 .formulario button:hover {
-    background-color: #218838;
+    background-color: #770d29;
+}
+
+.formulario select {
+    width: 100%; 
+    padding: 10px; 
+    margin: 10px 0; 
+    border: 1px solid #ccc;
+    border-radius: 4px; 
+    font-size: 20px;
 }
 
 .product-list {
@@ -123,9 +141,97 @@ nav a:hover {
 
 .product-card a {
     text-decoration: none;
-    color: #007bff;
+    color: #bd1a46;
+    font-size: 17px;
 }
 
 .product-card a:hover {
     text-decoration: underline;
+}
+
+.navBar {
+    background-color: #bd1a46;
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.navBar:hover {
+    background-color: #770d29;
+    text-decoration: none;
+}
+
+.dropbtn {
+    background-color: #bd1a46;
+    color: white;
+    padding: 10px;
+    font-size: 18px;
+    border: none;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #d9d7d7;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #770d29;
+}
+
+.editProduct {
+    max-width: 600px;
+    margin: 25px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.editProduct input,
+.editProduct button {
+    width: 97%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 20px;
+}
+.editProduct button {
+    background-color: #a92246;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.editProduct button:hover {
+    background-color: #770d29;
 }
