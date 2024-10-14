@@ -12,6 +12,8 @@ router.get('/products/:productId', productController.showProductById); // Ver de
 router.post('/:productId/delete', productController.deleteProduct); // Eliminar un producto
 router.get('/:productId/edit', productController.showEditProduct); // Formulario de edición
 router.post('/:productId/edit', productController.updateProduct); // Hacer la atualización
+router.post('/create', productController.addProduct); // Ruta para crear un producto
+
 
 
 module.exports = router;

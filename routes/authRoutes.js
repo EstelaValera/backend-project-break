@@ -1,20 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const {
-    showRegisterForm,
-    registerUser,
-    showLoginForm,
-    loginUser,
-    logoutUser
-} = require('../controllers/authController');
+const authController = require('../controllers/authController');
 
-// Rutas de autenticación
-router.get('/register', showRegisterForm);
-router.post('/register', registerUser);
-
-router.get('/login', showLoginForm);
-router.post('/login', loginUser);
-
-router.post('/logout', logoutUser);
+router.get('/register', authController.showRegisterForm);
+router.post('/register', authController.registerUser);
+router.get('/login', authController.showLoginFormAuth);
+router.post('/login', authController.loginUser);
 
 module.exports = router;

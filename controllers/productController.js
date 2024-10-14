@@ -1,5 +1,9 @@
 const Product =  require('../models/Product');
 const mongoose = require('mongoose');
+const { showLoginFormAuth } = require("./authController")
+
+const { db } = require('../config/firebase'); 
+const { collection, addDoc, getDocs } = require("firebase/firestore"); 
 
 
 //mostrar todos los productos
@@ -7,7 +11,7 @@ const showProducts = async (req, res) => {
     try {
         const products = await Product.find();
         const productCards = getProductCards(products);
-        res.send(baseHtml() + getNavBarWithEdit(products) + productCards); 
+        res.send(baseHtml() + getNavBarWithEdit(products) + showLoginFormAuth() + productCards); 
     } catch (err) {
         res.status(500).send('Error al obtener productos');
     }
@@ -134,6 +138,7 @@ const showProductsByCategory = async (req, res) => {
 
 const getInicio =async (req, res) => {
     try {
+        console.log("1")
         res.send(baseHtml() + getNavBar());
     } catch (err) {
         console.log(err);
@@ -141,6 +146,24 @@ const getInicio =async (req, res) => {
     }
 };
 
+
+// Función para agregar un nuevo producto
+const addProduct = async (req, res) => {
+    const { name, description, image, category, size, price } = req.body;
+    try {
+        const product = { name, description, image, category, size, price };
+        const docRef = await addDoc(collection(db, "products"), product);
+        console.log("Producto añadido con ID: ", docRef.id);
+        res.redirect('/products'); 
+    } catch (e) {
+        console.error("Error añadiendo el producto: ", e);
+        res.status(500).send("Error al añadir el producto");
+    }
+};
+
+const showRegisterForm = (req, res) => {
+    res.send(baseHtml() + getNavBar() + getRegisterForm()); 
+};
 
 const baseHtml = () => `
     <!DOCTYPE html>
@@ -152,7 +175,6 @@ const baseHtml = () => `
     </head>
     <body>
         <h1>Bienvenido a la Tienda de Ropa</h1>
-        <p>Elige una categoría:</p>
         <nav class="categorías">
             <a href="/products/category/camisetas">Camisetas</a>
             <a href="/products/category/pantalones">Pantalones</a>
@@ -205,11 +227,11 @@ const getProductForm = () => `
         <label for="size">Talla:</label>
         <select name="size" required>
             <option value="" disabled selected>Seleccione una talla</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
+            <option value="XS">XS (36)</option>
+            <option value="S">S (37)</option>
+            <option value="M">M (38)</option>
+            <option value="L">L (39)</option>
+            <option value="XL">XL (40)</option>
             <option value="TALLA UNICA">TALLA UNICA</option>
         </select>
 
@@ -244,4 +266,6 @@ module.exports = {
     showProductsByCategory,
     getInicio,
     getProductDetails,
+    addProduct,
+    showRegisterForm,
 };

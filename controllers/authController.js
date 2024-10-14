@@ -1,83 +1,91 @@
-const admin = require('../config/firebase');
+const { db } = require('../config/firebase'); 
+const { collection, query, where, getDocs } = require('firebase/firestore'); 
+const { getAuth, createUserWithEmailAndPassword } = require('firebase/auth');
 
-// Mostrar formulario de registro
+const bcrypt = require('bcrypt'); 
+
+
 const showRegisterForm = (req, res) => {
-    res.send(`
-    <h2>Registro</h2>
-    <form action="/auth/register" method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
-        <button type="submit">Registrarse</button>
-    </form>
-    `);
+    res.send(baseHtml() + getNavBar() + getRegisterForm());
 };
 
-// Registrar nuevo usuario
+const getNavBar = () => `
+    <nav>
+        <a href="/products">Inicio</a>
+        <a href="/products/show">Nuevo Producto</a>
+    </nav>
+`;
+
 const registerUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
+    const auth = getAuth(); 
 
     try {
-    const userRecord = await admin.auth().createUser({
-        email,
-        password,
-    });
-    console.log('Usuario registrado con éxito:', userRecord.uid);
-    res.redirect('/auth/login');
+        const userCredential = await createUserWithEmailAndPassword(auth, username, password);
+        const user = userCredential.user;
+
+        req.session.username = user.email;
+
+        res.redirect('/products');
     } catch (error) {
-    console.error('Error al registrar usuario:', error);
-    res.status(500).send('Error al registrar usuario');
+        console.error('Error al registrar usuario en Firebase:', error);
+        res.status(500).send('Error al registrar el usuario');
     }
 };
 
-// Mostrar formulario de login
-const showLoginForm = (req, res) => {
-    res.send(`
-    <h2>Iniciar Sesión</h2>
-    <form action="/auth/login" method="POST">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+
+const showLoginFormAuth = () => {
+    return (getLoginForm() + getRegisterForm());
+};
+
+
+const loginUser = async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const userQuery = query(collection(db, 'users'), where('username', '==', username));
+        const querySnapshot = await getDocs(userQuery);
+
+        if (querySnapshot.empty) {
+            return res.status(400).send('Usuario no encontrado');
+        }
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+
+        const validPassword = await bcrypt.compare(password, userData.password);
+
+        if (!validPassword) {
+            return res.status(400).send('Contraseña incorrecta');
+        }
+        req.session.username = username;
+        res.redirect('/products');
+    } catch (err) {
+        res.status(500).send('Error al iniciar sesión');
+    }
+};
+
+
+const getRegisterForm = () => `
+    <form class="register" action="/auth/register" method="POST">
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <button type="submit">Registrar</button>
+    </form>
+`;
+
+
+const getLoginForm = () => `
+    <form class="login" action="/auth/login" method="POST">
+        <input type="text" name="username" placeholder="Usuario" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
         <button type="submit">Iniciar Sesión</button>
     </form>
-    `);
-};
+`;
 
-// Iniciar sesión de usuario
-const loginUser = async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-    // Autenticar al usuario con Firebase
-    const user = await admin.auth().getUserByEmail(email);
-    
-    // Comprobar las credenciales
-    if (user) {
-      // Simulamos autenticación local para simplificar
-      // Puedes agregar lógica extra para generar un token o manejar sesiones aquí
-      res.redirect('/dashboard');  // Redirigir al dashboard después del login
-    } else {
-        res.status(401).send('Credenciales incorrectas');
-    }
-    } catch (error) {
-    console.error('Error al iniciar sesión:', error);
-    res.status(500).send('Error al iniciar sesión');
-    }
-};
-
-// Cerrar sesión del usuario
-const logoutUser = (req, res) => {
-  // Destruir la sesión o eliminar el token (según el manejo de sesiones)
-    req.session = null;
-    res.redirect('/auth/login');
-};
 
 module.exports = {
     showRegisterForm,
     registerUser,
-    showLoginForm,
-    loginUser,
-    logoutUser,
+    showLoginFormAuth,
+    loginUser
 };
