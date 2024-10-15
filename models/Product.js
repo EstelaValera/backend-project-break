@@ -20,7 +20,7 @@ const ProductSchema = new mongoose.Schema({
 
         category: {
             type: String,
-            enum: ['camisetas', 'pantalones', 'zapatos', 'accesorios'],
+            enum: ['camisetas', 'pantalones', 'zapatos', 'accesorios', 'vestidos y conjuntos'],
             required: true
         },
 

@@ -1,9 +1,5 @@
 const Product =  require('../models/Product');
 const mongoose = require('mongoose');
-const { showLoginFormAuth } = require("./authController")
-
-const { db } = require('../config/firebase'); 
-const { collection, addDoc, getDocs } = require("firebase/firestore"); 
 
 
 //mostrar todos los productos
@@ -11,7 +7,7 @@ const showProducts = async (req, res) => {
     try {
         const products = await Product.find();
         const productCards = getProductCards(products);
-        res.send(baseHtml() + getNavBarWithEdit(products) + showLoginFormAuth() + productCards); 
+        res.send(baseHtml() + getNavBarWithEdit(products) + productCards); 
     } catch (err) {
         res.status(500).send('Error al obtener productos');
     }
@@ -177,6 +173,7 @@ const baseHtml = () => `
         <h1>Bienvenido a la Tienda de Ropa</h1>
         <nav class="categorías">
             <a href="/products/category/camisetas">Camisetas</a>
+            <a href="/products/category/vestidos y conjuntos">Vestidos y conjuntos</a>
             <a href="/products/category/pantalones">Pantalones</a>
             <a href="/products/category/zapatos">Zapatos</a>
             <a href="/products/category/accesorios">Accesorios</a>
@@ -219,6 +216,7 @@ const getProductForm = () => `
         <select name="category" required>
             <option value="" disabled selected>Seleccione una categoría</option>
             <option value="camisetas">Camisetas</option>
+            <option value="vestidos y conjuntos">Vestidos y conjuntos</option>
             <option value="pantalones">Pantalones</option>
             <option value="zapatos">Zapatos</option>
             <option value="accesorios">Accesorios</option>
@@ -227,11 +225,11 @@ const getProductForm = () => `
         <label for="size">Talla:</label>
         <select name="size" required>
             <option value="" disabled selected>Seleccione una talla</option>
-            <option value="XS">XS (36)</option>
-            <option value="S">S (37)</option>
-            <option value="M">M (38)</option>
-            <option value="L">L (39)</option>
-            <option value="XL">XL (40)</option>
+            <option value="XS">XS / 36</option>
+            <option value="S">S / 37</option>
+            <option value="M">M / 38</option>
+            <option value="L">L / 39</option>
+            <option value="XL">XL / 40</option>
             <option value="TALLA UNICA">TALLA UNICA</option>
         </select>
 
